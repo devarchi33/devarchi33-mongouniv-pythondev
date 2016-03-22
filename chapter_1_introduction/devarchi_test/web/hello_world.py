@@ -7,6 +7,22 @@ def home_page():
     return bottle.template('hello_world', {'username': "Donghoon", 'things': mythings})
 
 
+@bottle.post("/favorite_fruit")
+def favorite_fruit():
+    fruit = bottle.request.forms.get("fruit")
+    if fruit is None or fruit == "":
+        fruit = "No fruit selected."
+
+    bottle.response.set_cookie("fruit", fruit)
+    bottle.redirect("/show_fruit")
+
+
+@bottle.route("/show_fruit")
+def show_fruit():
+    fruit = bottle.request.get_cookie("fruit")
+    return bottle.template("fruit_selection.tpl", {'fruit': fruit})
+
+
 @bottle.route("/testpage")
 def test_page():
     return "this is a test page."
